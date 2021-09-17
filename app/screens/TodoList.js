@@ -11,36 +11,33 @@ import {
 import Task from "../componets/Task";
 
 function TodoList(props) {
-  const [task, Settask] = useState("");
+ 
+  const [taskinput, Settask] = useState("");
   const [taskList, SettaskList] = useState([]);
-
+  
   const AddItem = () => {
-    SettaskList([...taskList, task]);
-    Settask(null);
     Keyboard.dismiss();
+    SettaskList([...taskList, taskinput]);
+    Settask("");
   };
+
 
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <Text style={styles.title}>Today's tasks</Text>
         <View style={styles.taskContainer}>
-          {
-            taskList.map(
-              (y)=>{
-                console.log('current Item:',y);
-               return <Task Text={y} />
-              }
-            )
-          }
-          </View>
+          {taskList.map((item, index) => {
+            return <Task key={index} Text={item} />;
+          })}
+        </View>
       </View>
 
       <KeyboardAvoidingView
         style={styles.keybordViewContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <TextInput
+        <TextInput value = {taskinput}
           style={styles.textInput}
           placeholder="Add your Item"
           onChangeText={(text) => Settask(text)}

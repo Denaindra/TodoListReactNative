@@ -11,16 +11,21 @@ import {
 import Task from "../componets/Task";
 
 function TodoList(props) {
- 
+
   const [taskinput, Settask] = useState("");
   const [taskList, SettaskList] = useState([]);
-  
+
   const AddItem = () => {
     Keyboard.dismiss();
     SettaskList([...taskList, taskinput]);
-    Settask("");
+    Settask(null);
   };
 
+  const RemoveItem = (index) => {
+    let tasklistCopy = [...taskList];
+    tasklistCopy.splice(index, 1);
+    SettaskList(tasklistCopy);
+  };
 
   return (
     <View style={styles.background}>
@@ -28,7 +33,11 @@ function TodoList(props) {
         <Text style={styles.title}>Today's tasks</Text>
         <View style={styles.taskContainer}>
           {taskList.map((item, index) => {
-            return <Task key={index} Text={item} />;
+            return (
+              <TouchableOpacity key={index} onPress={()=>RemoveItem(index)} >
+                <Task Text={item} />
+              </TouchableOpacity>
+            );
           })}
         </View>
       </View>
@@ -37,12 +46,13 @@ function TodoList(props) {
         style={styles.keybordViewContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <TextInput value = {taskinput}
+        <TextInput
+          value={taskinput}
           style={styles.textInput}
           placeholder="Add your Item"
           onChangeText={(text) => Settask(text)}
         />
-        <TouchableOpacity onPress={AddItem}>
+        <TouchableOpacity onPress={()=>AddItem()}>
           <View style={styles.circleView}>
             <Text>+</Text>
           </View>
